@@ -432,7 +432,7 @@ public class PaparazziPlugin @Inject constructor(
     val dependency = if (isInternal()) {
       dependencies.project(mapOf("path" to ":paparazzi"))
     } else {
-      dependencies.create("app.cash.paparazzi:paparazzi:$VERSION")
+      dependencies.create("io.github.francoisblavoet:paparazzi:$VERSION")
     }
 
     val nativeReportRuntimeDeps: List<Dependency> =
