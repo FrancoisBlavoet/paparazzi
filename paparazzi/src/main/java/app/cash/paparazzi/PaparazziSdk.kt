@@ -55,6 +55,9 @@ import app.cash.paparazzi.internal.PaparazziSavedStateRegistryOwner
 import app.cash.paparazzi.internal.Renderer
 import app.cash.paparazzi.internal.SessionParamsBuilder
 import app.cash.paparazzi.internal.interceptors.EditModeInterceptor
+import app.cash.paparazzi.internal.interceptors.ShowSecretsSettingRegisterCallbackInterceptor
+import app.cash.paparazzi.internal.interceptors.ShowSecretsSettingShouldShowPhysicalInputInterceptor
+import app.cash.paparazzi.internal.interceptors.ShowSecretsSettingShouldShowTouchInputInterceptor
 import app.cash.paparazzi.internal.layoutlib.LayoutlibPatch
 import app.cash.paparazzi.internal.layoutlib.RenderSizingState
 import app.cash.paparazzi.internal.parsers.LayoutPullParser
@@ -144,6 +147,7 @@ public class PaparazziSdk @JvmOverloads constructor(
   public fun setup() {
     if (!isInitialized) {
       registerViewEditModeInterception()
+      registerShowSecretsSettingInterception()
 
       LayoutlibPatch.install(ByteBuddyAgent.install())
       InterceptorRegistrar.registerMethodInterceptors()
@@ -589,6 +593,17 @@ public class PaparazziSdk @JvmOverloads constructor(
       "android.view.View",
       "isInEditMode",
       EditModeInterceptor::class.java
+    )
+  }
+
+  private fun registerShowSecretsSettingInterception() {
+    InterceptorRegistrar.addMethodInterceptors(
+      "android.text.ShowSecretsSetting",
+      setOf(
+        "shouldShowTouchInput" to ShowSecretsSettingShouldShowTouchInputInterceptor::class.java,
+        "shouldShowPhysicalInput" to ShowSecretsSettingShouldShowPhysicalInputInterceptor::class.java,
+        "registerCallback" to ShowSecretsSettingRegisterCallbackInterceptor::class.java
+      )
     )
   }
 
