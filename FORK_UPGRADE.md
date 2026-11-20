@@ -12,7 +12,7 @@ Audit completed November 19, 2026.
   `fix-apng-aware-overwrite-check` branches. Duplicate implementations and
   intermediate experiments are consolidated, not stacked on one another.
 - New local branch: `codex/paparazzi-alpha05-1`.
-- Proposed fork version: `2.0.0-alpha05.1-v1`. No branch has been pushed and nothing has been published externally.
+- Release version: `2.0.0-alpha05.1-v1`. Publication is in progress after the full check suite passed.
 
 ## Change-by-change disposition
 
@@ -72,8 +72,14 @@ are documented as `./gradlew` for normal use.
 - The three JUnit adapter modules' test tasks completed; they have no standalone
   unit tests. Their runtime/dependency wiring is exercised by the native-report
   integration tests above.
-- The full Gradle plugin integration suite was **not** run; the eight selected
-  cases cover the carried fixes, native-report adapters and KMP wiring.
+- Follow-up release gate: `./gradlew check --continue` **passed** on November 19,
+  2026. The top-level XML reports contain **274 tests: 268 passed, 6 skipped,
+  0 failures/errors**, including all 96 Gradle plugin integration cases (95 passed,
+  1 skipped). Nested fixtures deliberately exercise failing builds; their expected
+  failures are handled by the integration tests and are not release-gate failures.
+- Two tracked fixture PNGs and generated resource/snapshot directories modified by
+  the full integration suite were restored/removed after the tests. No extra golden
+  changes beyond the two reviewed accessibility updates are part of the release.
 
 Reproduce the final pass:
 

@@ -2,6 +2,25 @@
 
 ## [Unreleased]
 
+## [2.0.0-alpha05.1-v1] - 2026-11-19
+
+Fork release based on upstream `2.0.0-alpha05.1`.
+
+### Fixed
+* Prevent Compose 1.12+ secure text fields from crashing on API 37 `ShowSecretsSetting` calls.
+* Compare every APNG frame when deciding whether to overwrite a golden; account for frame-count and FPS changes.
+* Decode RGB APNG frames with opaque alpha and unsigned color channels.
+* Keep report files for animations with different frame rates separate.
+* Exclude fully transparent Compose accessibility nodes, including `graphicsLayer { alpha = 0f }`.
+
+### Fork configuration
+* Publish artifacts under `io.github.francoisblavoet` and use plugin ID `io.github.francoisblavoet.paparazzi`.
+* Keep the new native-report JUnit adapters on the fork's artifact coordinates.
+* Retain upstream's hidden-semantics and hidden-subtree fixes without duplicating them.
+
+See `FORK_UPGRADE.md` for the complete patch audit and verification details.
+Upstream's accessibility and scroll-rendering golden re-recording requirements still apply.
+
 ## [2.0.0-alpha05.1] - 2026-09-28
 
 This release swaps layoutlib's simplified window and render model for the framework's, so behavior follows the platform as it changes. Dialogs, popups and sheets are real windows with their own `ViewRootImpl`, giving z-order, dimming and per-window insets that match the device. Measure, layout and pre-draw run through `ViewRootImpl.doTraversal()`, and each render session owns its `Looper`.
@@ -545,7 +564,8 @@ As of this release, consumers must build on Java 11 environments.
 
 
 
-[Unreleased]: https://github.com/cashapp/paparazzi/compare/2.0.0-alpha05.1...HEAD
+[Unreleased]: https://github.com/FrancoisBlavoet/paparazzi/compare/2.0.0-alpha05.1-v1...HEAD
+[2.0.0-alpha05.1-v1]: https://github.com/FrancoisBlavoet/paparazzi/releases/tag/2.0.0-alpha05.1-v1
 [2.0.0-alpha05.1]: https://github.com/cashapp/paparazzi/releases/tag/2.0.0-alpha05.1
 [2.0.0-alpha05]: https://github.com/cashapp/paparazzi/releases/tag/2.0.0-alpha05
 [2.0.0-alpha04]: https://github.com/cashapp/paparazzi/releases/tag/2.0.0-alpha04
