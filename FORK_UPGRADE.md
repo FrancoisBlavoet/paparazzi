@@ -161,3 +161,42 @@ redundant upload attempt, not a test failure. The signed local publication had
 already reached **PUBLISHED** and all public artifacts were verified. Do not
 rerun publication for this immutable version; configure GitHub release secrets
 separately if automatic tag publication is desired for a future version.
+
+
+## v2: deterministic callback scheduling
+
+Release version: `2.0.0-alpha05.1-v2` (prepared November 20, 2026).
+
+- Replace Layoutlib's per-Handler weak-map timestamp tie breaking with a weak-owner
+  queue ordered by timestamp and a session-wide posting sequence.
+- Install it during `SessionInteractiveData` construction, before any callbacks
+  can be posted; no already-queued initialization work is reordered or dropped.
+- Preserve queue clearing, owner collection, and independent queues on configuration
+  changes. No forced test order, extra frames, animation delays, or tolerance changes.
+- Include preloaded-target retransformation support following upstream PR #2484,
+  and a dedicated fresh-JVM regression that preloads all four patched classes.
+- Do not carry the unsuccessful frame-clock/Layoutlib 17 or main-dispatcher probes.
+
+### Focused verification
+
+Twelve queue/session tests passed. The deterministic hash-collision regression
+fails without FIFO tie breaking (`[2, 1, 3]` instead of `[1, 2, 3]`) and passes with it.
+
+With the private fork artifact, all 12 IDS navigation movies matched across
+Image-first, Default-first, Search-first, and repeated Image-first runs: 942 frames
+per run, 3,768 total. The complete diff animations also match pixel-for-pixel.
+The same two quick-return up/down movies consistently differ from old goldens
+on frames 66, 68, and 70; these are stable expected-image differences, not the
+reproduced nondeterminism. No IDS golden or dependency changes are part of this fork release.
+
+The complete release validation and publication result will be recorded below
+once confirmed. Fork tag publication is now opt-in; the existing signed local
+publishing path avoids the v1 tag workflow's missing-secret failure.
+
+
+### Release-test infrastructure
+
+The first full v2 gate reached the Robolectric fixture but its default 512 MiB
+TestKit daemon ran out of heap transforming `nativeruntime-dist-compat` before
+any test executed. Give that one fixture a 2 GiB Gradle heap; do not exclude the
+fixture or relax its assertions. The complete gate is rerun with it enabled.

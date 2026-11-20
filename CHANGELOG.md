@@ -2,6 +2,20 @@
 
 ## [Unreleased]
 
+## [2.0.0-alpha05.1-v2] - 2026-11-20
+
+Fork maintenance release based on upstream `2.0.0-alpha05.1`, retaining all v1 fixes.
+
+### Fixed
+* Dispatch equal-time Layoutlib Handler callbacks in global posting order instead of weak-map iteration order, removing the reproduced class-order-dependent animation frames.
+* Install the deterministic queue before a render session can post callbacks, preserving weak Handler ownership and per-session isolation.
+* Apply Layoutlib compatibility patches even when another test loaded their target classes before Paparazzi's first render (following upstream #2484).
+
+### Verification
+* Cover FIFO timestamp ties, weak-owner cleanup, concurrent posts, configuration changes, and preloaded Layoutlib classes.
+* Navigation animation controls matched pixel-for-pixel across three class orders and a repeated run. Two existing movies have stable baseline differences on three frames; consumers may need to re-record those animations.
+* Layoutlib remains at 16.2.3. This release does not include the experimental frame-clock, Layoutlib 17, or main-dispatcher changes.
+
 ## [2.0.0-alpha05.1-v1] - 2026-11-19
 
 Fork release based on upstream `2.0.0-alpha05.1`.
@@ -564,7 +578,8 @@ As of this release, consumers must build on Java 11 environments.
 
 
 
-[Unreleased]: https://github.com/FrancoisBlavoet/paparazzi/compare/2.0.0-alpha05.1-v1...HEAD
+[Unreleased]: https://github.com/FrancoisBlavoet/paparazzi/compare/2.0.0-alpha05.1-v2...HEAD
+[2.0.0-alpha05.1-v2]: https://github.com/FrancoisBlavoet/paparazzi/releases/tag/2.0.0-alpha05.1-v2
 [2.0.0-alpha05.1-v1]: https://github.com/FrancoisBlavoet/paparazzi/releases/tag/2.0.0-alpha05.1-v1
 [2.0.0-alpha05.1]: https://github.com/cashapp/paparazzi/releases/tag/2.0.0-alpha05.1
 [2.0.0-alpha05]: https://github.com/cashapp/paparazzi/releases/tag/2.0.0-alpha05

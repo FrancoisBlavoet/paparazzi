@@ -10,6 +10,8 @@ env:
 
 jobs:
   release:
+    # Fork releases are signed/published locally unless automatic publication is explicitly enabled.
+    if: github.repository == 'cashapp/paparazzi' || vars.ENABLE_AUTOMATIC_RELEASE == 'true'
     runs-on: ubuntu-latest
 
     steps:

@@ -24,3 +24,24 @@ This will trigger a GitHub Action workflow which will create a GitHub release an
    2. Check `internalUsername` and `internalPassword` are set in `~/.gradle/gradle.properties` to the internal repository credentials.
 4. Run `./gradlew publishMavenPublicationToInternalRepository paparazzi-gradle-plugin:publishAllPublicationsToInternalRepository --no-parallel` to publish the internal release.
    * *Note* if gradle publish fails with `403` error, ensure the `VERSION_NAME` in step 1 is unique and isn't already published.
+
+## This fork
+
+Fork maintenance versions use `2.0.0-alpha05.1-vN` and retain the fork Maven coordinates
+and plugin ID. Run the complete `check` gate before releasing. Test-only local
+publications can use `-PRELEASE_SIGNING_ENABLED=false`; public releases must be signed.
+
+With the existing local signing and Maven Central credentials configured:
+
+```shell
+./gradlew publishAllPublicationsToProjectLocalMavenRepository --no-parallel -PRELEASE_SIGNING_ENABLED=true
+./gradlew publishAndReleaseToMavenCentral --no-parallel -PRELEASE_SIGNING_ENABLED=true
+```
+
+Confirm Central reports `PUBLISHED` and verify the runtime, plugin marker, and all
+other publications before creating the release tag and GitHub pre-release.
+
+The inherited tag workflow is opt-in for forks to avoid a second, failing upload
+after manual publication. To use automatic publication instead, configure its four
+signing/Central secrets and set the repository variable `ENABLE_AUTOMATIC_RELEASE`
+to `true`. Do not run both publishing paths for an immutable version.
