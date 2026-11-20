@@ -497,7 +497,7 @@ public class PaparazziPlugin @Inject constructor(
         if (configName in allowedConfigs) return@forEach
         val config = configurations.findByName(configName) ?: return@forEach
         val hasPaparazzi = config.dependencies.any {
-          it.group == "app.cash.paparazzi" && it.name == "paparazzi"
+          it.group == "io.github.francoisblavoet" && it.name == "paparazzi"
         }
         check(!hasPaparazzi) {
           "Paparazzi must not be declared in '$configName', as it should only resolve on Android JVM tests."

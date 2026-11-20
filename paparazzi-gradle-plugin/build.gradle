@@ -60,8 +60,8 @@ buildConfig {
   buildConfigField("String", "VERSION", "\"${project.version}\"")
   buildConfigField("String", "NATIVE_LIB_VERSION", "\"${libs.versions.layoutlib.get()}\"")
   buildConfigField("String", "JUNIT_PLATFORM_LAUNCHER", "\"${libs.junit.platform.launcher.get()}\"")
-  buildConfigField("String", "PAPARAZZI_JUNIT_VINTAGE_COORDINATES", "\"app.cash.paparazzi:paparazzi-junit-vintage:${project.version}\"")
-  buildConfigField("String", "PAPARAZZI_JUNIT_JUPITER_COORDINATES", "\"app.cash.paparazzi:paparazzi-junit-jupiter:${project.version}\"")
+  buildConfigField("String", "PAPARAZZI_JUNIT_VINTAGE_COORDINATES", "\"io.github.francoisblavoet:paparazzi-junit-vintage:${project.version}\"")
+  buildConfigField("String", "PAPARAZZI_JUNIT_JUPITER_COORDINATES", "\"io.github.francoisblavoet:paparazzi-junit-jupiter:${project.version}\"")
 }
 
 tasks.withType(Test).configureEach {

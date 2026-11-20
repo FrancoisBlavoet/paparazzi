@@ -1,7 +1,7 @@
 plugins {
   id 'com.android.library'
   id 'org.jetbrains.kotlin.plugin.compose'
-  id 'app.cash.paparazzi'
+  id 'io.github.francoisblavoet.paparazzi'
 }
 
 android {
@@ -10,7 +10,11 @@ android {
   // BasicSecureTextField's ShowSecretsSetting integration is API 37+, so this fixture
   // deliberately overrides the shared compileSdk to make sure the mockable android.jar
   // contains android.text.ShowSecretsSetting.
-  compileSdk = 37
+  compileSdk {
+    version = release(37) {
+      minorApiLevel = 0
+    }
+  }
   defaultConfig {
     minSdk = libs.versions.minSdk.get() as int
   }
