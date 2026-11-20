@@ -77,7 +77,9 @@ jobs:
         uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6
 
       - name: Run All Tests
-        run: ./gradlew check
+        # Integration fixtures publish to a local test repository, not Maven Central.
+        # Release branches must remain testable without exposing signing keys to CI.
+        run: ./gradlew check -PRELEASE_SIGNING_ENABLED=false
 
       - name: Upload Test Failures
         if: failure()

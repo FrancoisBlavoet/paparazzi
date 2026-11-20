@@ -116,3 +116,12 @@ No old-renderer PNGs were copied over the new release baselines.
 
 The negative probe was intentionally failing. It is separate from the final
 positive verification, which runs with every fork fix restored.
+
+### CI signing scope
+
+A release version enables artifact signing by default. Branch CI has no private
+signing key and initially stopped at `signMavenPublication` while preparing the
+integration fixtures, before running their tests. The CI `check` invocation now
+sets `-PRELEASE_SIGNING_ENABLED=false` for test-only local publications. Actual
+Maven Central publication retains `RELEASE_SIGNING_ENABLED=true` and signs every
+release artifact. No private signing material was added to GitHub.
