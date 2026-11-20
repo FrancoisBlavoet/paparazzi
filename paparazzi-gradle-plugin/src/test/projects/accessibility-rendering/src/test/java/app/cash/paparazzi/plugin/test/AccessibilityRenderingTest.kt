@@ -35,6 +35,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.LiveRegionMode
@@ -239,6 +240,12 @@ class AccessibilityRenderingTest {
             modifier = Modifier
               .alpha(0f),
             text = "Text with zero alpha"
+          )
+          Text(
+            modifier = Modifier.graphicsLayer {
+              alpha = 0f
+            },
+            text = "Text with zero alpha via graphicsLayer"
           )
           Box(
             modifier = Modifier

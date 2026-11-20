@@ -20,8 +20,6 @@ import android.os.ext.util.SdkLevel
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Checkable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.AbstractComposeView
 import androidx.compose.ui.platform.ViewRootForTest
 import androidx.compose.ui.semantics.LiveRegionMode.Companion.Assertive
@@ -309,12 +307,7 @@ internal class AccessibilityElementCollector {
     val hiddenFromAccessibility =
       config.getOrNull(SemanticsProperties.InvisibleToUser) != null ||
         config.getOrNull(SemanticsProperties.HideFromAccessibility) != null
-    val hasZeroAlphaModifier = layoutInfo.getModifierInfo().any {
-      // We don't get direct access to an alpha field but we can inspect the modifiers and see if
-      // a modifier of 0f was applied to the node.
-      it.modifier == Modifier.alpha(0f)
-    }
-    if (hiddenFromAccessibility || hasZeroAlphaModifier) {
+    if (hiddenFromAccessibility || isTransparent()) {
       return null
     }
 
@@ -491,6 +484,25 @@ internal class AccessibilityElementCollector {
     } else {
       null
     }
+  }
+
+  private fun SemanticsNode.isTransparent(): Boolean {
+    val candidates = arrayOf(
+      "isTransparent",
+      "isTransparent\$ui_release",
+      "getIsTransparent",
+      "getIsTransparent\$ui_release"
+    )
+    for (name in candidates) {
+      try {
+        val method = SemanticsNode::class.java.getDeclaredMethod(name)
+        method.isAccessible = true
+        if (method.invoke(this) as? Boolean == true) return true
+      } catch (_: Exception) {
+        // Try next candidate name.
+      }
+    }
+    return false
   }
 
   private fun String.replaceLineBreaks() =
