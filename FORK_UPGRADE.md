@@ -12,7 +12,7 @@ Audit completed November 19, 2026.
   `fix-apng-aware-overwrite-check` branches. Duplicate implementations and
   intermediate experiments are consolidated, not stacked on one another.
 - New local branch: `codex/paparazzi-alpha05-1`.
-- Release version: `2.0.0-alpha05.1-v1`. Publication is in progress after the full check suite passed.
+- Published release: `2.0.0-alpha05.1-v1` (Maven Central and GitHub, November 19, 2026).
 
 ## Change-by-change disposition
 
@@ -125,3 +125,28 @@ integration fixtures, before running their tests. The CI `check` invocation now
 sets `-PRELEASE_SIGNING_ENABLED=false` for test-only local publications. Actual
 Maven Central publication retains `RELEASE_SIGNING_ENABLED=true` and signs every
 release artifact. No private signing material was added to GitHub.
+
+## Published release
+
+- Maven Central deployment `bca7ae84-9b4d-4d91-9da3-369c73bd09d7` reached
+  **PUBLISHED** with no validation errors.
+- All **nine publications** were verified: eight library artifacts plus the Gradle
+  plugin marker. Upstream deliberately does not publish `paparazzi-preview-lints`.
+- Downloaded **82 artifact/signature files** from Maven Central. SHA-256 hashes of
+  every non-signature file match the signed local release files. Signature files
+  are present, and Central's signature validation passed.
+- The runtime and plugin-marker POMs and all eight library JARs also return HTTP
+  200 at their canonical Maven Central URLs, without cache-busting parameters.
+- Full cross-platform CI run `44681784392` passed: macOS, Windows and Linux, each
+  on JDK 21 and 24; documentation generation also passed.
+- GitHub release/tag: `2.0.0-alpha05.1-v1`, targeting the CI-verified source commit
+  `6a46c4b4d229a824a3ca50f6d785e5d20b1c18e1`.
+- Local verification manifest (not committed):
+  `build/release-verification/2.0.0-alpha05.1-v1.json`.
+
+Publication commands (run through the shared build queue):
+
+```shell
+./gradlew publishAllPublicationsToProjectLocalMavenRepository --no-parallel
+./gradlew publishAndReleaseToMavenCentral --no-parallel -PRELEASE_SIGNING_ENABLED=true
+```
