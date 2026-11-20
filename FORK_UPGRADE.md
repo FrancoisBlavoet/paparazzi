@@ -150,3 +150,14 @@ Publication commands (run through the shared build queue):
 ./gradlew publishAllPublicationsToProjectLocalMavenRepository --no-parallel
 ./gradlew publishAndReleaseToMavenCentral --no-parallel -PRELEASE_SIGNING_ENABLED=true
 ```
+
+### Automatic tag-workflow outcome
+
+Creating the GitHub release also triggered the inherited tag-publishing workflow
+(run `44687125124`). It finished before cancellation could take effect and failed
+at `:paparazzi-annotations:signMavenPublication` with `Could not read PGP secret
+key`: the fork has no GitHub release signing secrets configured. This was a
+redundant upload attempt, not a test failure. The signed local publication had
+already reached **PUBLISHED** and all public artifacts were verified. Do not
+rerun publication for this immutable version; configure GitHub release secrets
+separately if automatic tag publication is desired for a future version.
