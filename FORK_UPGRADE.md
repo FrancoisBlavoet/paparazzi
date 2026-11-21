@@ -12,7 +12,8 @@ Audit completed November 19, 2026.
   `fix-apng-aware-overwrite-check` branches. Duplicate implementations and
   intermediate experiments are consolidated, not stacked on one another.
 - New local branch: `codex/paparazzi-alpha05-1`.
-- Published release: `2.0.0-alpha05.1-v1` (Maven Central and GitHub, November 19, 2026).
+- Published releases: `2.0.0-alpha05.1-v1` (November 19, 2026) and
+  `2.0.0-alpha05.1-v2` (November 20, 2026), on Maven Central and GitHub.
 
 ## Change-by-change disposition
 
@@ -165,7 +166,7 @@ separately if automatic tag publication is desired for a future version.
 
 ## v2: deterministic callback scheduling
 
-Release version: `2.0.0-alpha05.1-v2` (prepared November 20, 2026).
+Published release: `2.0.0-alpha05.1-v2` (November 20, 2026).
 
 - Replace Layoutlib's per-Handler weak-map timestamp tie breaking with a weak-owner
   queue ordered by timestamp and a session-wide posting sequence.
@@ -189,14 +190,38 @@ The same two quick-return up/down movies consistently differ from old goldens
 on frames 66, 68, and 70; these are stable expected-image differences, not the
 reproduced nondeterminism. No IDS golden or dependency changes are part of this fork release.
 
-The complete release validation and publication result will be recorded below
-once confirmed. Fork tag publication is now opt-in; the existing signed local
-publishing path avoids the v1 tag workflow's missing-secret failure.
+The complete release validation and publication results are recorded below.
+Fork tag publication is now opt-in; the existing signed local publishing path
+avoids the v1 tag workflow's missing-secret failure.
 
 
 ### Release-test infrastructure
 
 The first full v2 gate reached the Robolectric fixture but its default 512 MiB
 TestKit daemon ran out of heap transforming `nativeruntime-dist-compat` before
-any test executed. Give that one fixture a 2 GiB Gradle heap; do not exclude the
+that fixture's tests started. Give that one fixture a 2 GiB Gradle heap; do not exclude the
 fixture or relax its assertions. The complete gate is rerun with it enabled.
+
+
+### v2 final verification and publication
+
+- Clean-fixture `./gradlew check --continue -PRELEASE_SIGNING_ENABLED=false`
+  **passed**: 287 top-level tests, **281 passed, 6 skipped, 0 failures/errors**,
+  including all 96 plugin integration cases. Restore deliberately mutated fixture
+  goldens and generated resource/configuration files between repeated local gates.
+- API compatibility and repository-wide formatting checks passed.
+- Fresh-JVM preloaded-target coverage passed for all four patched Layoutlib classes.
+- Cross-platform CI run `44838783365` passed on macOS, Windows, and Linux, each
+  with JDK 21 and 24; documentation generation passed too.
+- Repeated all four IDS animation controls with the **actual signed v2 JAR**:
+  all 12 movie hashes match the validated FIFO fix in every run. The same two stable
+  golden differences remain; no IDS dependency or expected-image files were changed.
+- Signed Maven Central deployment `9214314f-d81b-46e0-b06e-f3f61f7bbee1` reached
+  **PUBLISHED**, with no validation errors.
+- Verified all **nine publications / 82 artifact and signature files** from public
+  Maven Central. Every SHA-256 matches the signed local release files. Canonical
+  runtime/plugin-marker POMs and all eight library JAR URLs return HTTP 200.
+- GitHub pre-release/tag: `2.0.0-alpha05.1-v2`, targeting the exact CI-verified
+  source commit `416437642498a365f1d6d8dcdfbddbf46a4397fc`.
+- Local verification manifest (not committed):
+  `build/release-verification/2.0.0-alpha05.1-v2.json`.
