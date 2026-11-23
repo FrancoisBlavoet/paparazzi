@@ -245,3 +245,25 @@ are included. Layoutlib remains 16.2.3 and the FIFO/session fixes remain intact.
 
 This follows upstream's NORMAL-mode scope. The known resizing-mode bottom-inset
 limitation and complete cutout/dialog/legacy coverage are not claimed fixed.
+
+
+### v3 final verification and publication
+
+- Full `check --continue`: **292 tests, 286 passed, 6 skipped, zero failures/errors**,
+  on local macOS JDK 21 and again on JDK 24. Test launcher metadata confirms 24.0.2
+  for the latter; the temporary JDK was not installed system-wide. API/formatting
+  and all sample snapshots passed, including the six new inset expectations.
+- CI run `45271908026`: Windows and Linux passed on both JDK 21 and JDK 24,
+  and docs passed. GitHub macOS jobs never started because hosted arm64 runners
+  were unavailable; these jobs were cancelled by the service. This is recorded
+  as an infrastructure exception, not a successful hosted macOS run.
+- ICApp's saved-lists loading control failed with published v2 and passed its
+  unchanged original golden with the candidate v3 implementation. Storefront's
+  same 997-test suite improved from 151 to six image mismatches without changing
+  expected images. No application-side inset padding was added.
+- Signed deployment `37cf0c8c-cbaa-494f-8710-8c5cae74bbb3` reached **PUBLISHED**.
+  Verified all nine publications / 82 artifact and signature files against the
+  signed local outputs, plus canonical runtime/marker/library URLs.
+- GitHub pre-release/tag `2.0.0-alpha05.1-v3` points to release code
+  `784c5880b61ca3109e83bfb8d568d83c46385568`.
+- Local verification manifest: `build/release-verification/2.0.0-alpha05.1-v3.json`.
