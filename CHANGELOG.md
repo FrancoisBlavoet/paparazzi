@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+## [2.0.0-alpha05.1-v3] - 2026-11-23
+
+### Fixed
+* Preserve simulated system-bar insets across Layoutlib window relayouts, backporting upstream #2562 (`73097afb1c9826fe4fd4f58e261aed3498ccdf5a`).
+* Configure only Layoutlib's synthetic preview window to avoid double fitting and duplicate system-bar painting.
+* Add standard Compose snapshots covering visible, hidden, dark, translucent, landscape, and repeated system-UI captures.
+
+Retains the v2 FIFO callback fix and all earlier fork fixes. Layoutlib remains at 16.2.3.
+The inset fix targets NORMAL rendering mode; the upstream resizing-mode bottom-inset limitation remains.
+
 ## [2.0.0-alpha05.1-v2] - 2026-11-20
 
 Fork maintenance release based on upstream `2.0.0-alpha05.1`, retaining all v1 fixes.
@@ -578,7 +588,8 @@ As of this release, consumers must build on Java 11 environments.
 
 
 
-[Unreleased]: https://github.com/FrancoisBlavoet/paparazzi/compare/2.0.0-alpha05.1-v2...HEAD
+[Unreleased]: https://github.com/FrancoisBlavoet/paparazzi/compare/2.0.0-alpha05.1-v3...HEAD
+[2.0.0-alpha05.1-v3]: https://github.com/FrancoisBlavoet/paparazzi/releases/tag/2.0.0-alpha05.1-v3
 [2.0.0-alpha05.1-v2]: https://github.com/FrancoisBlavoet/paparazzi/releases/tag/2.0.0-alpha05.1-v2
 [2.0.0-alpha05.1-v1]: https://github.com/FrancoisBlavoet/paparazzi/releases/tag/2.0.0-alpha05.1-v1
 [2.0.0-alpha05.1]: https://github.com/cashapp/paparazzi/releases/tag/2.0.0-alpha05.1

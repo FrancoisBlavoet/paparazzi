@@ -13,9 +13,9 @@ import java.lang.instrument.Instrumentation
 import java.security.ProtectionDomain
 
 /**
- * Load-time compatibility patches for Layoutlib canvas sizing and callback scheduling.
+ * Load-time compatibility patches for Layoutlib rendering and callback scheduling.
  *
- * Three independent defects live here; both are described in full on the advice that fixes them.
+ * The compatibility issues are described on the advice and support code that fixes them.
  *
  * 1. A traversal can run before the canvas has been sized for the content
  *    ([RenderSizingAdvice.SuppressPrematureTraversal]).
@@ -25,6 +25,9 @@ import java.security.ProtectionDomain
  *
  * 3. Equal-time Handler callbacks otherwise depend on WeakHashMap iteration order
  *    ([CallbackQueueAdvice.SessionCreated]).
+ *
+ * 4. The synthetic preview window loses its seeded insets on relayout, and its outer decor can
+ *    inset content that Layoutlib already positions ([WindowInsetsSupport]).
  *
  * Every layoutlib class is offered to the transformer at first load through the ordinary
  * application class loader, so `Advice` can wrap existing methods without adding members. Targets
@@ -52,6 +55,12 @@ internal object LayoutlibPatch {
   private const val APPLIED = "applied"
 
   private val targets = listOf(
+    Target(
+      binaryName = "com.android.internal.policy.PhoneWindow",
+      methodName = "setContentView",
+      descriptor = "(Landroid/view/View;)V",
+      advice = WindowInsetsAdvice.SetContentView::class.java
+    ),
     Target(
       binaryName = "com.android.layoutlib.bridge.SessionInteractiveData",
       methodName = "<init>",
@@ -117,7 +126,7 @@ internal object LayoutlibPatch {
       buildString {
         append("Paparazzi could not apply required Layoutlib compatibility patches. ")
         append("This layoutlib is not the shape Paparazzi was built against. ")
-        append("Canvas sizing or Handler callback ordering would be unreliable. Unpatched targets:")
+        append("Canvas sizing, system-UI insets, or Handler callback ordering would be unreliable. Unpatched targets:")
         broken.forEach {
           append("\n  - ${it.binaryName}#${it.methodName}${it.descriptor}: ${it.status}")
         }

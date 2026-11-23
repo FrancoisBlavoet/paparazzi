@@ -225,3 +225,23 @@ fixture or relax its assertions. The complete gate is rerun with it enabled.
   source commit `416437642498a365f1d6d8dcdfbddbf46a4397fc`.
 - Local verification manifest (not committed):
   `build/release-verification/2.0.0-alpha05.1-v2.json`.
+
+## v3: preserve simulated system-UI insets
+
+Prepared `2.0.0-alpha05.1-v3` on November 23, 2026 by porting upstream PR #2562,
+implementation `73097afb1c9826fe4fd4f58e261aed3498ccdf5a`, onto v2. The inherited
+snapshot fixture comes from its #2561 parent; only the final fixed expectations
+are included. Layoutlib remains 16.2.3 and the FIFO/session fixes remain intact.
+
+- Preserve the matching preview window's seeded inset sources across empty
+  `BridgeWindowSession.relayout` replies; respect populated upstream replies.
+- Configure only the synthetic Layoutlib wrapper to avoid double fitting or
+  duplicate system-bar painting. No application padding workaround is added.
+- Include six standard Compose snapshot expectations covering visible/hidden,
+  dark/translucent, landscape and repeated captures, and preload the fifth patch
+  target in the existing fresh-JVM regression.
+- The port passes runtime, API, formatting and all sample snapshots on Layoutlib
+  16.2.3. Full release/consumer verification and publication will be recorded below.
+
+This follows upstream's NORMAL-mode scope. The known resizing-mode bottom-inset
+limitation and complete cutout/dialog/legacy coverage are not claimed fixed.

@@ -28,7 +28,8 @@ class PreloadedLayoutlibTargetsTest {
         "android.view.ViewRootImpl",
         "com.android.layoutlib.bridge.impl.RenderSessionImpl",
         "com.android.layoutlib.bridge.impl.BridgeWindowSession",
-        "com.android.layoutlib.bridge.SessionInteractiveData"
+        "com.android.layoutlib.bridge.SessionInteractiveData",
+        "com.android.internal.policy.PhoneWindow"
       ).forEach { Class.forName(it, false, PreloadedLayoutlibTargetsTest::class.java.classLoader) }
     }
   }
